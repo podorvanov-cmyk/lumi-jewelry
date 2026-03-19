@@ -17,7 +17,7 @@
   --text-light: rgba(255,255,255,0.45);
 }
 html { scroll-behavior: smooth; }
-body { font-family: 'Jost', sans-serif; background: #0d0818; color: var(--text); overflow-x: hidden; font-weight: 300; }
+body { font-family: 'Jost', sans-serif; background: #080608; color: var(--text); overflow-x: hidden; font-weight: 300; }
 
 /* HOLOGRAPHIC CANVAS BG */
 #holo-canvas {
@@ -128,10 +128,10 @@ section { padding: 100px 60px; }
 .about-inner {
   max-width: 780px; margin: 0 auto; text-align: center;
   padding: 60px 50px; border-radius: 24px;
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.1);
   backdrop-filter: blur(32px);
   -webkit-backdrop-filter: blur(32px);
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
   box-shadow: 0 0 80px rgba(180,80,240,0.12), inset 0 1px 0 rgba(255,255,255,0.12);
 }
 .about-text { font-size: 1rem; line-height: 2; color: rgba(255,255,255,0.65); }
@@ -181,7 +181,7 @@ section { padding: 100px 60px; }
 
 /* MEANING */
 .meaning { background: linear-gradient(135deg, #f0ebe3 0%, #dde8e8 100%); text-align: center; }
-.meaning-inner { max-width: 640px; margin: 0 auto; padding: 60px 50px; border-radius: 24px; background: rgba(255,255,255,0.06); backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px); border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 0 60px rgba(80,120,240,0.1), inset 0 1px 0 rgba(255,255,255,0.1); }
+.meaning-inner { max-width: 640px; margin: 0 auto; padding: 60px 50px; border-radius: 24px; background: rgba(255,255,255,0.1); backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px); border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 0 60px rgba(80,120,240,0.1), inset 0 1px 0 rgba(255,255,255,0.1); }
 .meaning-quote {
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(1.4rem, 3vw, 2.4rem); font-weight: 300;
@@ -444,11 +444,12 @@ footer {
   window.addEventListener('resize', resize);
 
   const blobs = [
-    { x: 0.2, y: 0.3, r: 0.45, dx: 0.00018, dy: 0.00012, c: ['#f040e0','#8020f0'] },
-    { x: 0.8, y: 0.2, r: 0.4,  dx:-0.00014, dy: 0.00016, c: ['#4080f0','#20c0f0'] },
-    { x: 0.5, y: 0.7, r: 0.5,  dx: 0.00012, dy:-0.00018, c: ['#c020e0','#6040f0'] },
-    { x: 0.1, y: 0.8, r: 0.35, dx: 0.0002,  dy:-0.00010, c: ['#f02090','#8000e0'] },
-    { x: 0.9, y: 0.7, r: 0.38, dx:-0.00016, dy:-0.00014, c: ['#2090f0','#a040f0'] },
+    { x: 0.15, y: 0.25, r: 0.5,  dx: 0.00016, dy: 0.00010, c: ['#ff6020','#ff9040'] },
+    { x: 0.80, y: 0.15, r: 0.45, dx:-0.00012, dy: 0.00014, c: ['#c0c8d8','#e0e8ff'] },
+    { x: 0.55, y: 0.65, r: 0.55, dx: 0.00010, dy:-0.00016, c: ['#2060e0','#40a0ff'] },
+    { x: 0.10, y: 0.75, r: 0.38, dx: 0.00018, dy:-0.00008, c: ['#ff4080','#e020c0'] },
+    { x: 0.88, y: 0.70, r: 0.42, dx:-0.00014, dy:-0.00012, c: ['#a0b0c8','#6080c0'] },
+    { x: 0.50, y: 0.10, r: 0.35, dx: 0.00008, dy: 0.00018, c: ['#ff8020','#e06020'] },
   ];
 
   let bx = blobs.map(b => b.x * 1000);
@@ -458,7 +459,7 @@ footer {
 
   function draw() {
     ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = '#0d0818';
+    ctx.fillStyle = '#080608';
     ctx.fillRect(0, 0, W, H);
 
     blobs.forEach((blob, i) => {
@@ -478,7 +479,7 @@ footer {
 
       ctx.save();
       ctx.globalCompositeOperation = 'screen';
-      ctx.globalAlpha = 0.75;
+      ctx.globalAlpha = 0.9;
       ctx.fillStyle = g;
       ctx.beginPath();
       ctx.arc(x, y, r * pulse, 0, Math.PI * 2);
