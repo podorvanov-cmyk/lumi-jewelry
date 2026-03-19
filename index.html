@@ -316,6 +316,32 @@ footer {
 <!-- Floating glass drops -->
 <div class="drop-layer" id="drops"></div>
 
+<!-- Gel/glass decorative strokes -->
+<img src="img/gel1.png" alt="" style="
+  position:fixed; z-index:1; pointer-events:none;
+  width:380px; right:-80px; top:15%;
+  opacity:0.55; mix-blend-mode:multiply;
+  transform:rotate(-15deg);
+  animation:gel-float1 18s ease-in-out infinite;
+">
+<img src="img/gel2.png" alt="" style="
+  position:fixed; z-index:1; pointer-events:none;
+  width:280px; left:-60px; bottom:20%;
+  opacity:0.45; mix-blend-mode:multiply;
+  transform:rotate(20deg) scaleX(-1);
+  animation:gel-float2 22s ease-in-out infinite;
+">
+<style>
+@keyframes gel-float1 {
+  0%,100% { transform:rotate(-15deg) translate(0,0); }
+  50%      { transform:rotate(-12deg) translate(-15px, -25px); }
+}
+@keyframes gel-float2 {
+  0%,100% { transform:rotate(20deg) scaleX(-1) translate(0,0); }
+  50%      { transform:rotate(23deg) scaleX(-1) translate(10px, -18px); }
+}
+</style>
+
 <!-- Canvas for animated water shimmer -->
 <canvas id="water-canvas"></canvas>
 
