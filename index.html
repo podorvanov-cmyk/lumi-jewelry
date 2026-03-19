@@ -7,429 +7,327 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
 :root {
   --cream: #faf8f5;
   --pearl: #f3efe9;
   --blush: #ecddd4;
-  --mist: #dde8e8;
   --gold: #c8a882;
   --text: #2c2825;
   --text-soft: #7a7068;
   --text-light: #b0a898;
 }
-
 html { scroll-behavior: smooth; }
+body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--text); overflow-x: hidden; font-weight: 300; }
 
-body {
-  font-family: 'Jost', sans-serif;
-  background: var(--cream);
-  color: var(--text);
-  overflow-x: hidden;
-  font-weight: 300;
-}
-
-/* ─── PARTICLES ─── */
-.particles {
-  position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
-}
-.particle {
-  position: absolute;
-  border-radius: 50%;
-  animation: drift linear infinite;
-  opacity: 0;
-}
+/* PARTICLES */
+.particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.particle { position: absolute; border-radius: 50%; animation: drift linear infinite; opacity: 0; }
 @keyframes drift {
-  0%   { transform: translateY(110vh) translateX(0) scale(0.8); opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 0.6; }
-  100% { transform: translateY(-10vh) translateX(30px) scale(1.1); opacity: 0; }
+  0%   { transform: translateY(110vh) scale(0.8); opacity: 0; }
+  10%  { opacity: 0.8; }
+  90%  { opacity: 0.4; }
+  100% { transform: translateY(-10vh) scale(1.1); opacity: 0; }
 }
 
-/* ─── NAV ─── */
+/* NAV */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: 28px 60px;
+  padding: 20px 60px;
   display: flex; justify-content: space-between; align-items: center;
-  background: linear-gradient(180deg, rgba(250,248,245,0.95) 0%, transparent 100%);
+  background: rgba(250,248,245,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(200,168,130,0.1);
 }
-.nav-logo {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.3rem; font-weight: 400; letter-spacing: 6px;
-  color: var(--text); text-decoration: none;
-  text-transform: uppercase;
-}
+.nav-logo img { height: 42px; }
 .nav-links { display: flex; gap: 40px; }
-.nav-links a {
-  font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase;
-  color: var(--text-soft); text-decoration: none;
-  transition: color 0.4s;
-}
+.nav-links a { font-size: 0.68rem; letter-spacing: 3px; text-transform: uppercase; color: var(--text-soft); text-decoration: none; transition: color 0.4s; }
 .nav-links a:hover { color: var(--text); }
+.nav-insta { font-size: 0.68rem; letter-spacing: 2px; color: var(--gold); text-decoration: none; }
 
-/* ─── HERO ─── */
+/* HERO */
 .hero {
-  min-height: 100vh;
-  display: flex; flex-direction: column;
-  justify-content: center; align-items: center;
-  text-align: center;
-  padding: 120px 40px 80px;
-  position: relative;
-  background: linear-gradient(160deg, #faf8f5 0%, #f0ebe3 40%, #e8eeee 100%);
+  height: 100vh; position: relative; overflow: hidden;
+  display: flex; align-items: flex-end;
 }
-
-.hero-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(60px);
-  animation: orb-float ease-in-out infinite;
-  pointer-events: none;
+.hero-img {
+  position: absolute; inset: 0;
+  background-image: url('img/hero.jpg');
+  background-size: cover; background-position: center top;
+  transform: scale(1.03);
+  animation: hero-zoom 12s ease-in-out infinite alternate;
 }
-@keyframes orb-float {
-  0%,100% { transform: translate(0,0) scale(1); }
-  50%      { transform: translate(20px, -30px) scale(1.05); }
+@keyframes hero-zoom {
+  from { transform: scale(1.03); }
+  to   { transform: scale(1.08); }
 }
-
-.hero-eyebrow {
-  font-size: 0.65rem; letter-spacing: 5px; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 32px;
-  animation: fade-up 1.2s ease both;
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(0deg, rgba(42,34,28,0.6) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
 }
+.hero-content {
+  position: relative; z-index: 2;
+  padding: 0 80px 80px;
+  color: white;
+  animation: fade-up 1.5s ease both;
+}
+.hero-eyebrow { font-size: 0.6rem; letter-spacing: 6px; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 16px; }
 .hero h1 {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2.6rem, 7vw, 6rem);
-  font-weight: 300; line-height: 1.1;
-  color: var(--text);
-  letter-spacing: 2px;
-  animation: fade-up 1.2s 0.15s ease both;
-  max-width: 800px;
+  font-size: clamp(2.4rem, 6vw, 5rem); font-weight: 300;
+  line-height: 1.1; letter-spacing: 2px; margin-bottom: 20px;
 }
-.hero h1 em {
-  font-style: italic; color: var(--gold);
-}
-.hero-sub {
-  font-size: clamp(0.9rem, 2vw, 1.05rem);
-  color: var(--text-soft); line-height: 1.9;
-  margin-top: 28px; max-width: 480px;
-  animation: fade-up 1.2s 0.3s ease both;
-  font-weight: 300;
-}
-.hero-cta {
-  margin-top: 52px;
-  animation: fade-up 1.2s 0.45s ease both;
-}
+.hero h1 em { font-style: italic; color: var(--gold); }
+.hero-sub { font-size: 0.9rem; color: rgba(255,255,255,0.7); line-height: 1.8; max-width: 400px; margin-bottom: 36px; }
 .btn-light {
-  display: inline-block;
-  border: 1px solid var(--gold);
-  color: var(--gold); text-decoration: none;
-  padding: 14px 44px; font-size: 0.7rem;
-  letter-spacing: 4px; text-transform: uppercase;
-  font-weight: 300;
-  transition: all 0.4s;
-  background: transparent;
-  cursor: pointer;
+  display: inline-block; border: 1px solid rgba(255,255,255,0.6);
+  color: white; text-decoration: none;
+  padding: 13px 40px; font-size: 0.65rem; letter-spacing: 4px; text-transform: uppercase;
+  transition: all 0.4s; background: transparent;
 }
-.btn-light:hover {
-  background: var(--gold); color: white;
-}
+.btn-light:hover { background: white; color: var(--text); border-color: white; }
 
-.hero-scroll {
-  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  animation: fade-up 1.2s 0.8s ease both;
-}
-.hero-scroll span { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--text-light); }
-.scroll-line { width: 1px; height: 40px; background: linear-gradient(180deg, var(--gold), transparent); animation: scroll-pulse 2s ease-in-out infinite; }
-@keyframes scroll-pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+@keyframes fade-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ─── SECTION BASE ─── */
-.section { padding: 110px 60px; position: relative; }
-.section-inner { max-width: 1100px; margin: 0 auto; }
-.section-eyebrow {
-  font-size: 0.6rem; letter-spacing: 5px; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 20px;
-}
-.section-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1.8rem, 4vw, 3.2rem); font-weight: 300; line-height: 1.25;
-}
+/* SECTIONS */
+section { padding: 100px 60px; }
+.section-eyebrow { font-size: 0.6rem; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+.section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 4vw, 3.2rem); font-weight: 300; line-height: 1.2; }
 .section-title em { font-style: italic; color: var(--gold); }
-.divider-thin { width: 40px; height: 1px; background: var(--gold); margin: 28px 0; opacity: 0.5; }
+.divider { width: 40px; height: 1px; background: var(--gold); margin: 28px 0; opacity: 0.5; }
+.divider.center { margin: 28px auto; }
 
-/* ─── ABOUT ─── */
+/* ABOUT */
 .about { background: var(--pearl); }
-.about-inner {
-  max-width: 800px; margin: 0 auto; text-align: center;
-}
-.about-inner .section-title { margin-bottom: 16px; }
-.divider-thin.center { margin: 28px auto; }
-.about-text {
-  font-size: 1rem; line-height: 2; color: var(--text-soft);
-  font-weight: 300;
-}
-.about-text p + p { margin-top: 20px; }
-.about-text strong { color: var(--text); font-weight: 400; }
+.about-inner { max-width: 780px; margin: 0 auto; text-align: center; }
+.about-text { font-size: 1rem; line-height: 2; color: var(--text-soft); }
+.about-text p + p { margin-top: 18px; }
 
-/* ─── JEWELRY GRID ─── */
-.jewelry { background: var(--cream); }
-.jewelry-intro {
-  max-width: 560px; text-align: center; margin: 0 auto 70px;
+/* GALLERY */
+.gallery { background: var(--cream); padding: 100px 0; }
+.gallery-header { text-align: center; padding: 0 60px 60px; }
+.gallery-header p { max-width: 500px; margin: 20px auto 0; font-size: 0.9rem; color: var(--text-soft); line-height: 1.9; }
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 3px;
 }
-.jewelry-intro p { font-size: 0.95rem; line-height: 1.9; color: var(--text-soft); }
-.jewelry-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
-}
-.jewelry-item {
-  position: relative; overflow: hidden; cursor: pointer;
+.gallery-item {
+  overflow: hidden; cursor: pointer; position: relative;
   background: var(--pearl);
 }
-.jewelry-photo {
-  aspect-ratio: 3/4;
-  background: linear-gradient(135deg, #f0ebe3, #dde8e8, #ecddd4);
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
-  transition: transform 0.6s;
-}
-.jewelry-photo img {
+.gallery-item img {
   width: 100%; height: 100%; object-fit: cover;
-  transition: transform 0.6s;
+  transition: transform 0.7s ease;
+  display: block;
 }
-.jewelry-item:hover .jewelry-photo img { transform: scale(1.05); }
-.jewelry-photo-placeholder {
-  width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 3rem; opacity: 0.3;
-}
-.jewelry-info {
-  padding: 24px 28px 32px;
-}
-.jewelry-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.2rem; font-weight: 400; margin-bottom: 6px;
-  color: var(--text);
-}
-.jewelry-desc { font-size: 0.8rem; color: var(--text-light); line-height: 1.7; }
+.gallery-item:hover img { transform: scale(1.06); }
+.gallery-item.tall { grid-row: span 2; }
+.gallery-item.wide { grid-column: span 2; }
 
-/* ─── MEANING ─── */
-.meaning {
-  background: linear-gradient(135deg, #eae6df 0%, #dde8e8 100%);
-  text-align: center;
+.gallery-item .overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(0deg, rgba(42,34,28,0.5) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.4s;
+  display: flex; align-items: flex-end; padding: 24px;
 }
-.meaning-inner { max-width: 700px; margin: 0 auto; }
+.gallery-item:hover .overlay { opacity: 1; }
+.overlay-text { font-family: 'Cormorant Garamond', serif; color: white; font-size: 1rem; font-style: italic; }
+
+/* MEANING */
+.meaning { background: linear-gradient(135deg, #f0ebe3 0%, #dde8e8 100%); text-align: center; }
+.meaning-inner { max-width: 640px; margin: 0 auto; }
 .meaning-quote {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1.4rem, 3vw, 2.4rem);
-  font-weight: 300; line-height: 1.6;
-  color: var(--text); font-style: italic;
-  margin: 40px 0;
+  font-size: clamp(1.4rem, 3vw, 2.4rem); font-weight: 300;
+  line-height: 1.7; font-style: italic; color: var(--text);
+  margin: 36px 0 28px;
 }
-.meaning-text { font-size: 0.95rem; line-height: 2; color: var(--text-soft); }
-.meaning-text p + p { margin-top: 16px; }
+.meaning-text { font-size: 0.92rem; color: var(--text-soft); line-height: 2; }
+.meaning-text p + p { margin-top: 12px; }
 
-.meaning-orbs {
-  display: flex; justify-content: center; gap: 20px; margin-top: 60px;
+/* CTA */
+.cta-section { background: var(--cream); text-align: center; }
+.cta-inner { max-width: 540px; margin: 0 auto; }
+.cta-inner p { font-size: 0.92rem; color: var(--text-soft); line-height: 1.9; margin: 20px 0 40px; }
+.btn-gold {
+  display: inline-block;
+  background: var(--gold); color: white;
+  text-decoration: none; padding: 15px 50px;
+  font-size: 0.68rem; letter-spacing: 4px; text-transform: uppercase;
+  transition: all 0.4s;
 }
-.meaning-orb {
-  border-radius: 50%;
-  animation: orb-float ease-in-out infinite;
-}
+.btn-gold:hover { background: #a0845a; }
 
-/* ─── CTA ─── */
-.cta-section {
-  background: var(--cream); text-align: center; padding: 120px 60px;
-}
-.cta-inner { max-width: 560px; margin: 0 auto; }
-.cta-inner .section-title { margin-bottom: 24px; }
-.cta-inner p { font-size: 0.95rem; line-height: 1.9; color: var(--text-soft); margin-bottom: 44px; }
+/* INSTAGRAM */
+.insta-section { background: var(--pearl); padding: 80px 60px; text-align: center; }
+.insta-handle { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--gold); text-decoration: none; display: inline-block; margin-top: 16px; font-style: italic; transition: opacity 0.3s; }
+.insta-handle:hover { opacity: 0.7; }
 
-/* ─── FOOTER ─── */
+/* FOOTER */
 footer {
-  background: var(--pearl); padding: 50px 60px;
+  background: #2c2825; padding: 40px 60px;
   display: flex; justify-content: space-between; align-items: center;
-  border-top: 1px solid rgba(200,168,130,0.15);
 }
-.footer-logo {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.1rem; letter-spacing: 6px; color: var(--text);
-  text-transform: uppercase;
-}
-.footer-text { font-size: 0.65rem; letter-spacing: 2px; color: var(--text-light); text-transform: uppercase; }
+.footer-logo img { height: 32px; filter: brightness(0) invert(1) opacity(0.6); }
+.footer-text { font-size: 0.6rem; letter-spacing: 2px; color: rgba(255,255,255,0.3); text-transform: uppercase; }
 
-/* ─── REVEAL ANIMATION ─── */
-.reveal {
-  opacity: 0; transform: translateY(30px);
-  transition: opacity 0.9s ease, transform 0.9s ease;
-}
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 1s ease, transform 1s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* ─── RESPONSIVE ─── */
+/* RESPONSIVE */
 @media (max-width: 900px) {
-  nav { padding: 20px 24px; }
-  .nav-links { display: none; }
-  .section { padding: 70px 24px; }
-  .jewelry-grid { grid-template-columns: 1fr 1fr; }
-  footer { flex-direction: column; gap: 20px; text-align: center; }
-}
-@media (max-width: 600px) {
-  .jewelry-grid { grid-template-columns: 1fr; }
+  nav { padding: 16px 24px; } .nav-links { display: none; }
+  section { padding: 70px 24px; }
+  .hero-content { padding: 0 30px 60px; }
+  .gallery-grid { grid-template-columns: 1fr 1fr; }
+  .gallery-item.tall { grid-row: span 1; }
+  .gallery-item.wide { grid-column: span 1; }
+  footer { flex-direction: column; gap: 16px; text-align: center; }
+  .insta-section { padding: 60px 24px; }
 }
 </style>
 </head>
 <body>
 
-<!-- Floating particles -->
 <div class="particles" id="particles"></div>
 
 <!-- NAV -->
 <nav>
-  <a class="nav-logo" href="#">Lumi</a>
+  <a href="#" class="nav-logo"><img src="img/logo-black.jpg" alt="LUMI Jewelry" style="filter: none; opacity: 0.85;"></a>
   <div class="nav-links">
     <a href="#about">О нас</a>
-    <a href="#jewelry">Украшения</a>
+    <a href="#gallery">Украшения</a>
     <a href="#meaning">Смысл</a>
-    <a href="#contact">Контакт</a>
   </div>
+  <a href="https://instagram.com/lumi_jewerly" class="nav-insta" target="_blank">@lumi_jewerly</a>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-  <!-- Background orbs -->
-  <div class="hero-orb" style="width:500px;height:500px;background:rgba(200,168,130,0.12);top:-100px;right:-150px;animation-duration:8s;"></div>
-  <div class="hero-orb" style="width:300px;height:300px;background:rgba(221,232,232,0.3);bottom:50px;left:-80px;animation-duration:10s;animation-delay:-3s;"></div>
-  <div class="hero-orb" style="width:200px;height:200px;background:rgba(236,221,212,0.25);bottom:150px;right:100px;animation-duration:12s;animation-delay:-5s;"></div>
-
-  <div class="hero-eyebrow">LUMI Jewelry</div>
-
-  <h1>Times like this<br>need your <em>magic</em></h1>
-
-  <p class="hero-sub">Украшения, в которых живёт свет.<br>Созданы, чтобы напоминать о твоём внутреннем сиянии.</p>
-
-  <div class="hero-cta">
-    <a href="#jewelry" class="btn-light">Найти своё украшение</a>
+<div class="hero">
+  <div class="hero-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">LUMI Jewelry</div>
+    <h1>Times like this<br>need your <em>magic</em></h1>
+    <p class="hero-sub">Украшения, в которых живёт свет. Созданы, чтобы напоминать о твоём внутреннем сиянии.</p>
+    <a href="#gallery" class="btn-light">Смотреть украшения</a>
   </div>
-
-  <div class="hero-scroll">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
-  </div>
-</section>
+</div>
 
 <!-- ABOUT -->
-<section class="section about" id="about">
+<section class="about" id="about">
   <div class="about-inner reveal">
     <div class="section-eyebrow">О бренде</div>
     <h2 class="section-title">LUMI Jewelry</h2>
-    <div class="divider-thin center"></div>
+    <div class="divider center"></div>
     <div class="about-text">
-      <p>Украшения, созданные вручную из <strong>прозрачной смолы</strong>, в которую добавлено сияние света. Каждое изделие уникально — его невозможно повторить в точности.</p>
+      <p>Украшения, созданные вручную из прозрачной смолы, в которую добавлено сияние света. Каждое изделие уникально — его невозможно повторить в точности.</p>
       <p>В каждом — своё свечение, своё ощущение, своё состояние.</p>
       <p>Это не просто украшения.<br>Это способ сохранить и почувствовать свет внутри.</p>
     </div>
   </div>
 </section>
 
-<!-- JEWELRY -->
-<section class="section jewelry" id="jewelry">
-  <div class="section-inner">
-    <div class="jewelry-intro reveal">
-      <div class="section-eyebrow">Украшения</div>
-      <h2 class="section-title" style="text-align:center;margin-bottom:20px;">Каждое —<br>как <em>капля света</em></h2>
-      <p>Лёгкое, прозрачное, живое. Создано, чтобы стать твоим личным символом — состояния, момента или ощущения.</p>
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <div class="gallery-header reveal">
+    <div class="section-eyebrow">Украшения</div>
+    <h2 class="section-title">Каждое — как <em>капля света</em></h2>
+    <p>Лёгкое, прозрачное, живое. Создано, чтобы стать твоим личным символом — состояния, момента или ощущения.</p>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item tall reveal">
+      <img src="img/p12.jpg" alt="">
+      <div class="overlay"><div class="overlay-text">Капли света</div></div>
     </div>
-    <div class="jewelry-grid">
-      <div class="jewelry-item reveal">
-        <div class="jewelry-photo">
-          <div class="jewelry-photo-placeholder">✦</div>
-        </div>
-        <div class="jewelry-info">
-          <div class="jewelry-name">Украшение I</div>
-          <div class="jewelry-desc">Фото скоро появится</div>
-        </div>
-      </div>
-      <div class="jewelry-item reveal" style="transition-delay:0.1s">
-        <div class="jewelry-photo">
-          <div class="jewelry-photo-placeholder">✦</div>
-        </div>
-        <div class="jewelry-info">
-          <div class="jewelry-name">Украшение II</div>
-          <div class="jewelry-desc">Фото скоро появится</div>
-        </div>
-      </div>
-      <div class="jewelry-item reveal" style="transition-delay:0.2s">
-        <div class="jewelry-photo">
-          <div class="jewelry-photo-placeholder">✦</div>
-        </div>
-        <div class="jewelry-info">
-          <div class="jewelry-name">Украшение III</div>
-          <div class="jewelry-desc">Фото скоро появится</div>
-        </div>
-      </div>
+    <div class="gallery-item reveal" style="transition-delay:0.1s">
+      <img src="img/p9.jpg" alt="" style="object-position: center top;">
+      <div class="overlay"><div class="overlay-text">Ожерелье из смолы</div></div>
+    </div>
+    <div class="gallery-item reveal" style="transition-delay:0.15s">
+      <img src="img/p7.jpg" alt="" style="object-position: center top;">
+      <div class="overlay"><div class="overlay-text">Лёгкость</div></div>
+    </div>
+    <div class="gallery-item reveal" style="transition-delay:0.2s">
+      <img src="img/p5.jpg" alt="" style="object-position: center 30%;">
+      <div class="overlay"><div class="overlay-text">Сердечко</div></div>
+    </div>
+    <div class="gallery-item reveal" style="transition-delay:0.25s">
+      <img src="img/p6.jpg" alt="" style="object-position: center 30%;">
+      <div class="overlay"><div class="overlay-text">Чокер</div></div>
+    </div>
+    <div class="gallery-item tall reveal" style="transition-delay:0.1s">
+      <img src="img/p10.jpg" alt="">
+      <div class="overlay"><div class="overlay-text">Браслет и колье</div></div>
+    </div>
+    <div class="gallery-item reveal" style="transition-delay:0.15s">
+      <img src="img/p8.jpg" alt="" style="object-position: center 30%;">
+      <div class="overlay"><div class="overlay-text">Свет на коже</div></div>
+    </div>
+    <div class="gallery-item reveal" style="transition-delay:0.2s">
+      <img src="img/p11.jpg" alt="" style="object-position: center top;">
+      <div class="overlay"><div class="overlay-text">Кулон</div></div>
+    </div>
+    <div class="gallery-item wide reveal" style="transition-delay:0.25s">
+      <img src="img/p13.jpg" alt="" style="object-fit:cover;max-height:320px;">
+      <div class="overlay"><div class="overlay-text">Упаковка LUMI</div></div>
     </div>
   </div>
 </section>
 
 <!-- MEANING -->
-<section class="section meaning" id="meaning">
+<section class="meaning" id="meaning">
   <div class="meaning-inner reveal">
     <div class="section-eyebrow">Смысл</div>
-    <p class="meaning-quote">«Иногда всё, что нам нужно — это напоминание»</p>
+    <p class="meaning-quote">«Иногда всё, что нам нужно —<br>это напоминание»</p>
     <div class="meaning-text">
       <p>О том, что внутри уже есть свет.</p>
       <p>О том, что магия — не где-то, а в нас.</p>
-    </div>
-    <div class="meaning-orbs" style="margin-top:60px;">
-      <div class="meaning-orb" style="width:80px;height:80px;background:rgba(200,168,130,0.2);animation-duration:6s;"></div>
-      <div class="meaning-orb" style="width:120px;height:120px;background:rgba(221,232,232,0.4);animation-duration:8s;animation-delay:-2s;"></div>
-      <div class="meaning-orb" style="width:60px;height:60px;background:rgba(236,221,212,0.35);animation-duration:7s;animation-delay:-4s;"></div>
     </div>
   </div>
 </section>
 
 <!-- CTA -->
-<section class="cta-section" id="contact">
+<section class="cta-section">
   <div class="cta-inner reveal">
     <div class="section-eyebrow">Найди своё</div>
-    <h2 class="section-title">Почувствуй,<br>как оно <em>откликается</em></h2>
+    <h2 class="section-title">Почувствуй, как оно<br><em>откликается</em></h2>
     <p>Найди своё украшение и ощути, как оно резонирует с твоим внутренним светом.</p>
-    <a href="#jewelry" class="btn-light">Смотреть украшения</a>
+    <a href="https://instagram.com/lumi_jewerly" class="btn-gold" target="_blank">Написать нам</a>
   </div>
 </section>
 
+<!-- INSTAGRAM -->
+<div class="insta-section reveal">
+  <div class="section-eyebrow">Мы в Instagram</div>
+  <a href="https://instagram.com/lumi_jewerly" class="insta-handle" target="_blank">@lumi_jewerly</a>
+</div>
+
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">Lumi</div>
+  <div class="footer-logo"><img src="img/logo-pink.jpg" alt="LUMI"></div>
   <div class="footer-text">© 2026 LUMI Jewelry · Украшения из света</div>
 </footer>
 
 <script>
 // Particles
 const container = document.getElementById('particles');
-const colors = ['rgba(200,168,130,0.15)', 'rgba(221,232,232,0.2)', 'rgba(236,221,212,0.18)', 'rgba(250,248,245,0.3)'];
-for (let i = 0; i < 18; i++) {
+const colors = ['rgba(200,168,130,0.12)','rgba(221,232,232,0.18)','rgba(236,221,212,0.15)'];
+for (let i = 0; i < 15; i++) {
   const p = document.createElement('div');
   p.className = 'particle';
-  const size = 4 + Math.random() * 12;
-  p.style.cssText = `
-    width:${size}px; height:${size}px;
-    background:${colors[Math.floor(Math.random()*colors.length)]};
-    left:${Math.random()*100}%;
-    animation-duration:${14 + Math.random()*16}s;
-    animation-delay:-${Math.random()*20}s;
-  `;
+  const size = 4 + Math.random() * 10;
+  p.style.cssText = `width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};left:${Math.random()*100}%;animation-duration:${16+Math.random()*14}s;animation-delay:-${Math.random()*20}s;`;
   container.appendChild(p);
 }
-
-// Reveal on scroll
-const reveals = document.querySelectorAll('.reveal');
+// Reveal
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.12 });
-reveals.forEach(el => observer.observe(el));
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>
