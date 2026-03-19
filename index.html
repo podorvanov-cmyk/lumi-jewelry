@@ -48,17 +48,18 @@ body {
   66%      { transform: translate(-20px,25px) scale(0.94) rotate(-2deg); }
 }
 
-/* Капли-жемчужины */
+/* Капли воды */
 .drop-layer { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
 .drop {
-  position: absolute; border-radius: 50%;
-  animation: drop-float ease-in-out infinite;
+  position: absolute;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  animation: drop-sway ease-in-out infinite;
 }
-@keyframes drop-float {
-  0%,100% { transform: translateY(0) rotate(0deg); }
-  30%      { transform: translateY(-18px) rotate(4deg); }
-  60%      { transform: translateY(-10px) rotate(-3deg); }
-  80%      { transform: translateY(-22px) rotate(5deg); }
+@keyframes drop-sway {
+  0%,100% { transform: translateY(0px) rotate(-3deg) scale(1); }
+  25%      { transform: translateY(-12px) rotate(3deg) scale(1.04); }
+  50%      { transform: translateY(-6px) rotate(-1deg) scale(0.97); }
+  75%      { transform: translateY(-16px) rotate(4deg) scale(1.02); }
 }
 
 /* ─────────────────────────────────────────────
@@ -540,17 +541,26 @@ footer {
   draw();
 })();
 
-/* ── GLASS DROPS ─────────────────────────────── */
+/* ── WATER DROPS ─────────────────────────────── */
 (function() {
   const layer = document.getElementById('drops');
+  // Маленькие капельки — разные размеры, много штук
   const drops = [
-    { w:100, h:100, top:'7%',  left:'74%', delay:0,    dur:14 },
-    { w:62,  h:62,  top:'43%', left:'5%',  delay:-4,   dur:18 },
-    { w:148, h:148, top:'62%', left:'83%', delay:-8,   dur:22 },
-    { w:44,  h:44,  top:'18%', left:'40%', delay:-2,   dur:12 },
-    { w:82,  h:82,  top:'80%', left:'20%', delay:-6,   dur:16 },
-    { w:56,  h:56,  top:'3%',  left:'16%', delay:-10,  dur:20 },
-    { w:32,  h:32,  top:'55%', left:'58%', delay:-3,   dur:11 },
+    { w:18, h:22, top:'8%',  left:'72%', delay:0,    dur:8  },
+    { w:12, h:16, top:'15%', left:'20%', delay:-2,   dur:11 },
+    { w:24, h:30, top:'30%', left:'88%', delay:-4,   dur:14 },
+    { w:10, h:13, top:'42%', left:'6%',  delay:-1,   dur:9  },
+    { w:20, h:25, top:'55%', left:'78%', delay:-6,   dur:12 },
+    { w:14, h:18, top:'68%', left:'15%', delay:-3,   dur:10 },
+    { w:28, h:35, top:'75%', left:'55%', delay:-8,   dur:16 },
+    { w:10, h:13, top:'20%', left:'50%', delay:-5,   dur:7  },
+    { w:16, h:20, top:'88%', left:'35%', delay:-7,   dur:13 },
+    { w:8,  h:10, top:'5%',  left:'40%', delay:-9,   dur:9  },
+    { w:22, h:28, top:'48%', left:'92%', delay:-2,   dur:15 },
+    { w:12, h:15, top:'62%', left:'42%', delay:-4,   dur:8  },
+    { w:18, h:22, top:'35%', left:'28%', delay:-6,   dur:11 },
+    { w:9,  h:12, top:'80%', left:'68%', delay:-1,   dur:10 },
+    { w:26, h:32, top:'12%', left:'60%', delay:-3,   dur:17 },
   ];
   drops.forEach(d => {
     const el = document.createElement('div');
@@ -560,16 +570,18 @@ footer {
       top: d.top, left: d.left,
       animationDuration: d.dur+'s',
       animationDelay: d.delay+'s',
-      background: `radial-gradient(circle at 32% 28%,
-        rgba(255,255,255,0.97) 0%,
-        rgba(210,228,255,0.72) 28%,
-        rgba(185,210,250,0.48) 54%,
-        rgba(165,195,245,0.22) 74%,
+      // Форма капли: круглый верх, острый низ
+      borderRadius: '50% 50% 45% 45% / 55% 55% 45% 45%',
+      background: `radial-gradient(ellipse at 35% 30%,
+        rgba(255,255,255,0.95) 0%,
+        rgba(215,230,255,0.7) 30%,
+        rgba(190,215,250,0.45) 58%,
+        rgba(170,200,245,0.15) 78%,
         transparent 100%)`,
       boxShadow: [
-        `inset -${d.w*0.06|0}px -${d.w*0.06|0}px ${d.w*0.18|0}px rgba(160,190,240,0.22)`,
-        `inset ${d.w*0.04|0}px ${d.w*0.04|0}px ${d.w*0.12|0}px rgba(255,255,255,0.9)`,
-        `0 ${d.w*0.08|0}px ${d.w*0.32|0}px rgba(170,200,240,0.16)`
+        `inset -1px -2px 4px rgba(160,190,240,0.3)`,
+        `inset 1px 1px 3px rgba(255,255,255,0.95)`,
+        `0 2px 8px rgba(170,200,240,0.18)`
       ].join(','),
     });
     layer.appendChild(el);
