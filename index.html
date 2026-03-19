@@ -135,6 +135,15 @@ section { padding: 100px 60px; }
 .gallery-item:hover .overlay { opacity: 1; }
 .overlay-text { font-family: 'Cormorant Garamond', serif; color: white; font-size: 1rem; font-style: italic; }
 
+/* VIDEO */
+.video-section { background: var(--pearl); padding: 100px 60px; }
+.video-header { text-align: center; margin-bottom: 50px; }
+.video-header p { max-width: 480px; margin: 16px auto 0; font-size: 0.9rem; color: var(--text-soft); line-height: 1.9; }
+.video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; max-width: 1100px; margin: 0 auto; }
+.video-item { position: relative; overflow: hidden; background: #1a1612; }
+.video-item video { width: 100%; display: block; aspect-ratio: 9/16; object-fit: cover; }
+@media (max-width: 900px) { .video-grid { grid-template-columns: 1fr; } .video-section { padding: 70px 24px; } }
+
 /* MEANING */
 .meaning { background: linear-gradient(135deg, #f0ebe3 0%, #dde8e8 100%); text-align: center; }
 .meaning-inner { max-width: 640px; margin: 0 auto; }
@@ -274,6 +283,26 @@ footer {
     <div class="gallery-item wide reveal" style="transition-delay:0.25s">
       <img src="img/p13.jpg" alt="" style="object-fit:cover;max-height:320px;">
       <div class="overlay"><div class="overlay-text">Упаковка LUMI</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section class="video-section">
+  <div class="video-header reveal">
+    <div class="section-eyebrow">В движении</div>
+    <h2 class="section-title">Свет, который <em>живёт</em></h2>
+    <p>Каждое украшение раскрывается по-новому — в движении, в свете, в моменте.</p>
+  </div>
+  <div class="video-grid">
+    <div class="video-item reveal">
+      <video src="img/v1.mp4" autoplay muted loop playsinline></video>
+    </div>
+    <div class="video-item reveal" style="transition-delay:0.1s">
+      <video src="img/v2.mp4" autoplay muted loop playsinline></video>
+    </div>
+    <div class="video-item reveal" style="transition-delay:0.2s">
+      <video src="img/v3.mp4" autoplay muted loop playsinline></video>
     </div>
   </div>
 </section>
