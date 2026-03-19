@@ -8,503 +8,456 @@
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+body { font-family: 'Jost', sans-serif; font-weight: 300; overflow-x: hidden; color: #2a1f2e; min-height: 100vh; }
 
-body {
-  font-family: 'Jost', sans-serif;
-  font-weight: 300;
-  background: #f5f2ee;
-  color: #1a1510;
-  overflow-x: hidden;
+/* ══════════════════════════════════════
+   ANIMATED GRADIENT BACKGROUND
+══════════════════════════════════════ */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: -2;
+  background: linear-gradient(135deg,
+    #f5d5e8 0%, #e5d0f5 20%, #d0d8f8 40%,
+    #e8d0f5 60%, #f8d8e8 80%, #f0d0f0 100%);
+  background-size: 400% 400%;
+  animation: grad-flow 12s ease infinite;
 }
-
-/* ═══════════════════════════════
-   HOLOGRAPHIC CANVAS BACKGROUND
-═══════════════════════════════ */
-#holo-bg {
-  position: fixed; inset: 0; z-index: 0;
-  pointer-events: none;
-}
-
-/* ═══════════════════════════════
-   GLASS UTILITY
-═══════════════════════════════ */
-.glass {
-  background: rgba(255,255,255,0.45);
-  backdrop-filter: blur(28px) saturate(1.6);
-  -webkit-backdrop-filter: blur(28px) saturate(1.6);
-  border: 1px solid rgba(255,255,255,0.7);
-  box-shadow:
-    0 8px 32px rgba(160,130,200,0.12),
-    inset 0 1px 0 rgba(255,255,255,0.9),
-    inset 0 -1px 0 rgba(255,255,255,0.3);
-}
-.glass-dark {
-  background: rgba(255,255,255,0.18);
-  backdrop-filter: blur(32px) saturate(1.8);
-  -webkit-backdrop-filter: blur(32px) saturate(1.8);
-  border: 1px solid rgba(255,255,255,0.35);
-  box-shadow:
-    0 8px 40px rgba(0,0,0,0.25),
-    inset 0 1px 0 rgba(255,255,255,0.4);
-}
-
-/* ═══════════════════════════════
-   HOLO TEXT GRADIENT
-═══════════════════════════════ */
-.holo-text {
-  background: linear-gradient(135deg, #d080f0 0%, #80a0f8 35%, #60d0e8 65%, #f080d0 100%);
-  background-size: 300%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: holo-shift 6s ease infinite;
-}
-@keyframes holo-shift {
+@keyframes grad-flow {
   0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
+  33%  { background-position: 100% 0%; }
+  66%  { background-position: 50% 100%; }
   100% { background-position: 0% 50%; }
 }
 
-/* ═══════════════════════════════
+/* Noise texture overlay for depth */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: -1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════════
+   FLOATING GLASS BLOBS
+══════════════════════════════════════ */
+.blob-layer {
+  position: fixed; inset: 0; z-index: -1;
+  pointer-events: none; overflow: hidden;
+}
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(0px);
+  mix-blend-mode: normal;
+}
+/* Large soft blobs */
+.blob-1 {
+  width: 55vw; height: 55vw;
+  top: -15vw; left: -10vw;
+  background: radial-gradient(circle at 35% 35%,
+    rgba(255,255,255,0.85) 0%,
+    rgba(220,200,255,0.5) 40%,
+    rgba(200,180,255,0.15) 70%,
+    transparent 100%);
+  animation: blob-drift1 18s ease-in-out infinite;
+  filter: blur(2px);
+}
+.blob-2 {
+  width: 45vw; height: 45vw;
+  bottom: -10vw; right: -8vw;
+  background: radial-gradient(circle at 60% 40%,
+    rgba(255,255,255,0.8) 0%,
+    rgba(255,210,240,0.5) 40%,
+    rgba(240,180,255,0.15) 70%,
+    transparent 100%);
+  animation: blob-drift2 22s ease-in-out infinite;
+  filter: blur(2px);
+}
+.blob-3 {
+  width: 35vw; height: 35vw;
+  top: 35%; left: 30%;
+  background: radial-gradient(circle at 40% 30%,
+    rgba(255,255,255,0.75) 0%,
+    rgba(200,220,255,0.4) 45%,
+    transparent 70%);
+  animation: blob-drift3 15s ease-in-out infinite;
+  filter: blur(3px);
+}
+/* Small chrome droplets */
+.drop {
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%,
+    rgba(255,255,255,0.95) 0%,
+    rgba(220,200,255,0.7) 30%,
+    rgba(180,160,240,0.4) 60%,
+    rgba(160,140,220,0.1) 100%);
+  box-shadow:
+    inset -3px -3px 8px rgba(160,140,220,0.3),
+    inset 3px 3px 8px rgba(255,255,255,0.8),
+    0 4px 20px rgba(180,160,240,0.2);
+  animation: drop-float linear infinite;
+}
+.drop-1 { width: 80px; height: 80px; top: 12%; left: 75%; animation-duration: 14s; animation-delay: -2s; }
+.drop-2 { width: 50px; height: 50px; top: 45%; left: 8%;  animation-duration: 18s; animation-delay: -7s; }
+.drop-3 { width: 120px; height: 120px; top: 65%; left: 85%; animation-duration: 20s; animation-delay: -5s; }
+.drop-4 { width: 35px; height: 35px; top: 20%; left: 40%; animation-duration: 12s; animation-delay: -9s; }
+.drop-5 { width: 65px; height: 65px; top: 80%; left: 25%; animation-duration: 16s; animation-delay: -3s; }
+.drop-6 { width: 90px; height: 90px; top: 5%;  left: 20%; animation-duration: 22s; animation-delay: -11s; }
+
+@keyframes blob-drift1 {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33%      { transform: translate(3vw, 4vw) scale(1.04); }
+  66%      { transform: translate(-2vw, 2vw) scale(0.97); }
+}
+@keyframes blob-drift2 {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33%      { transform: translate(-4vw,-3vw) scale(1.05); }
+  66%      { transform: translate(2vw,-1vw) scale(0.96); }
+}
+@keyframes blob-drift3 {
+  0%,100% { transform: translate(0,0) rotate(0deg) scale(1); }
+  50%      { transform: translate(-3vw, 3vw) rotate(10deg) scale(1.06); }
+}
+@keyframes drop-float {
+  0%   { transform: translateY(0px) rotate(0deg); }
+  25%  { transform: translateY(-18px) rotate(5deg); }
+  50%  { transform: translateY(-8px) rotate(-3deg); }
+  75%  { transform: translateY(-22px) rotate(8deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+/* ══════════════════════════════════════
+   GLASS PANEL UTILITY
+══════════════════════════════════════ */
+.glass {
+  background: rgba(255,255,255,0.42);
+  backdrop-filter: blur(32px) saturate(1.8) brightness(1.05);
+  -webkit-backdrop-filter: blur(32px) saturate(1.8) brightness(1.05);
+  border: 1px solid rgba(255,255,255,0.75);
+  box-shadow:
+    0 8px 32px rgba(180,150,220,0.15),
+    0 2px 8px rgba(255,255,255,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    inset 0 -1px 0 rgba(200,180,255,0.15);
+}
+.glass-hero {
+  background: rgba(255,255,255,0.22);
+  backdrop-filter: blur(40px) saturate(1.6);
+  -webkit-backdrop-filter: blur(40px) saturate(1.6);
+  border: 1px solid rgba(255,255,255,0.45);
+  box-shadow:
+    0 24px 64px rgba(100,80,160,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.6),
+    inset 0 0 0 1px rgba(255,255,255,0.1);
+}
+
+/* ══════════════════════════════════════
+   HOLO TEXT
+══════════════════════════════════════ */
+.holo {
+  background: linear-gradient(135deg, #c060e0 0%, #8080f0 35%, #60b8e8 65%, #d060c0 100%);
+  background-size: 250%;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  animation: holo-move 7s ease infinite;
+}
+@keyframes holo-move {
+  0%,100% { background-position: 0%; }
+  50%      { background-position: 100%; }
+}
+
+/* ══════════════════════════════════════
    NAV
-═══════════════════════════════ */
+══════════════════════════════════════ */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   padding: 18px 60px;
   display: flex; justify-content: space-between; align-items: center;
-  background: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.35);
   backdrop-filter: blur(40px) saturate(1.5);
   -webkit-backdrop-filter: blur(40px) saturate(1.5);
-  border-bottom: 1px solid rgba(255,255,255,0.5);
+  border-bottom: 1px solid rgba(255,255,255,0.6);
+  box-shadow: 0 2px 20px rgba(180,150,220,0.1), inset 0 1px 0 rgba(255,255,255,0.9);
 }
-.nav-logo img { height: 40px; }
+.nav-logo img { height: 38px; }
 .nav-links { display: flex; gap: 40px; }
-.nav-links a {
-  font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
-  color: rgba(26,21,16,0.55); text-decoration: none; transition: color 0.3s;
-}
-.nav-links a:hover { color: rgba(26,21,16,1); }
-.nav-insta {
-  font-size: 0.65rem; letter-spacing: 2px; text-decoration: none;
-  background: linear-gradient(90deg, #d080f0, #80a0f8, #60d0e8);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  font-weight: 400;
-}
+.nav-links a { font-size: 0.64rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(42,31,46,0.5); text-decoration: none; transition: color 0.3s; }
+.nav-links a:hover { color: rgba(42,31,46,0.9); }
+.nav-insta { font-size: 0.64rem; letter-spacing: 2px; text-decoration: none; font-weight: 300; }
 
-/* ═══════════════════════════════
+/* ══════════════════════════════════════
    HERO
-═══════════════════════════════ */
-.hero {
-  height: 100vh; position: relative;
-  display: flex; align-items: flex-end;
-  overflow: hidden;
-}
+══════════════════════════════════════ */
+.hero { height: 100vh; position: relative; display: flex; align-items: flex-end; overflow: hidden; }
 .hero-photo {
   position: absolute; inset: 0;
   background: url('img/hero.jpg') center 30% / cover no-repeat;
-  animation: slow-zoom 14s ease-in-out infinite alternate;
+  animation: slow-zoom 16s ease-in-out infinite alternate;
 }
-@keyframes slow-zoom {
-  from { transform: scale(1.0); }
-  to   { transform: scale(1.06); }
-}
+@keyframes slow-zoom { from { transform: scale(1.0); } to { transform: scale(1.06); } }
 .hero-tint {
   position: absolute; inset: 0;
   background: linear-gradient(0deg,
-    rgba(20,12,8,0.7) 0%,
-    rgba(20,12,8,0.25) 45%,
-    rgba(20,12,8,0.05) 100%
-  );
+    rgba(180,140,210,0.55) 0%,
+    rgba(180,140,210,0.2) 40%,
+    rgba(210,180,240,0.05) 100%);
 }
-.hero-card {
+.hero-content {
   position: relative; z-index: 2;
   margin: 0 60px 60px;
-  padding: 44px 52px;
-  border-radius: 28px;
-  max-width: 560px;
-  background: rgba(255,255,255,0.14);
-  backdrop-filter: blur(32px) saturate(1.6);
-  -webkit-backdrop-filter: blur(32px) saturate(1.6);
-  border: 1px solid rgba(255,255,255,0.3);
-  box-shadow:
-    0 24px 64px rgba(0,0,0,0.2),
-    inset 0 1px 0 rgba(255,255,255,0.5),
-    inset 0 0 0 1px rgba(255,255,255,0.1);
+  padding: 48px 56px;
+  border-radius: 32px;
+  max-width: 580px;
   animation: fade-up 1.4s ease both;
 }
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.hero-eyebrow {
-  font-size: 0.58rem; letter-spacing: 5px; text-transform: uppercase;
-  color: rgba(255,255,255,0.5); margin-bottom: 14px;
-}
-.hero h1 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 300;
-  line-height: 1.1; color: white; letter-spacing: 1px;
-  margin-bottom: 16px;
-}
-.hero-sub {
-  font-size: 0.88rem; color: rgba(255,255,255,0.65);
-  line-height: 1.85; margin-bottom: 30px;
-}
-.btn-glass {
+@keyframes fade-up { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: translateY(0); } }
+.hero-eyebrow { font-size: 0.58rem; letter-spacing: 5px; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 14px; }
+.hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 300; line-height: 1.1; color: white; letter-spacing: 1px; margin-bottom: 18px; }
+.hero-sub { font-size: 0.88rem; color: rgba(255,255,255,0.7); line-height: 1.85; margin-bottom: 32px; max-width: 400px; }
+
+.btn-pearl {
   display: inline-block; text-decoration: none;
-  padding: 12px 36px; border-radius: 100px;
+  padding: 13px 38px; border-radius: 100px;
   font-size: 0.62rem; letter-spacing: 3.5px; text-transform: uppercase;
-  background: rgba(255,255,255,0.18);
-  border: 1px solid rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.55);
   color: white;
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: all 0.4s;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
+  transition: all 0.35s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 4px 20px rgba(150,100,200,0.2);
 }
-.btn-glass:hover {
-  background: rgba(255,255,255,0.32);
-  border-color: rgba(255,255,255,0.7);
-}
-.btn-glass-holo {
+.btn-pearl:hover { background: rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.8); }
+
+.btn-holo {
   display: inline-block; text-decoration: none;
   padding: 14px 44px; border-radius: 100px;
-  font-size: 0.62rem; letter-spacing: 3.5px; text-transform: uppercase;
-  background: rgba(255,255,255,0.5);
+  font-size: 0.62rem; letter-spacing: 3.5px; text-transform: uppercase; color: #2a1f2e;
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.85);
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  color: #1a1510;
+  box-shadow: 0 4px 24px rgba(180,150,220,0.3), inset 0 1px 0 rgba(255,255,255,0.95);
+  transition: all 0.35s;
   position: relative; overflow: hidden;
-  transition: all 0.4s;
-  border: 1px solid rgba(255,255,255,0.8);
-  box-shadow:
-    0 4px 24px rgba(180,140,220,0.25),
-    inset 0 1px 0 rgba(255,255,255,0.9);
 }
-.btn-glass-holo::before {
+.btn-holo::after {
   content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(208,128,240,0.15), rgba(128,160,248,0.15), rgba(96,208,232,0.15));
-  opacity: 0; transition: opacity 0.4s;
+  position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(135deg, rgba(200,150,240,0.18), rgba(150,180,255,0.15), rgba(130,220,240,0.12));
+  opacity: 0; transition: opacity 0.35s;
 }
-.btn-glass-holo:hover::before { opacity: 1; }
+.btn-holo:hover::after { opacity: 1; }
 
-/* ═══════════════════════════════
+/* ══════════════════════════════════════
    SECTIONS
-═══════════════════════════════ */
-.section { padding: 110px 60px; position: relative; z-index: 1; }
-.eyebrow {
-  font-size: 0.58rem; letter-spacing: 5px; text-transform: uppercase;
-  margin-bottom: 16px; display: block;
-}
-h2.serif {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1.8rem, 4vw, 3.4rem); font-weight: 300; line-height: 1.2;
-  color: #1a1510;
-}
-h2.serif em {
-  font-style: italic;
-}
-.thin-line {
-  width: 36px; height: 1px; margin: 24px 0;
-  background: linear-gradient(90deg, #d080f0, #80a0f8, #60d0e8);
-  opacity: 0.7;
-}
-.thin-line.center { margin: 24px auto; }
+══════════════════════════════════════ */
+section { padding: 100px 60px; position: relative; z-index: 1; }
+.eyebrow { font-size: 0.57rem; letter-spacing: 5px; text-transform: uppercase; display: block; margin-bottom: 14px; }
+h2.serif { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.9rem, 4vw, 3.4rem); font-weight: 300; line-height: 1.2; color: #2a1f2e; }
+h2.serif em { font-style: italic; }
+.rule { width: 36px; height: 1px; margin: 22px 0; opacity: 0.6;
+  background: linear-gradient(90deg, #c060e0, #8080f0, #60b8e8); }
+.rule.c { margin: 22px auto; }
 
-/* ═══════════════════════════════
+/* ══════════════════════════════════════
    ABOUT
-═══════════════════════════════ */
-.about-wrap {
-  max-width: 820px; margin: 0 auto; text-align: center;
-  padding: 64px 56px; border-radius: 32px;
-}
-.about-text { font-size: 1rem; line-height: 2.1; color: #5a5048; }
+══════════════════════════════════════ */
+.about-wrap { max-width: 800px; margin: 0 auto; text-align: center; padding: 64px 60px; border-radius: 36px; }
+.about-text { font-size: 1rem; line-height: 2.1; color: rgba(42,31,46,0.6); }
 .about-text p + p { margin-top: 18px; }
 
-/* ═══════════════════════════════
+/* ══════════════════════════════════════
    GALLERY
-═══════════════════════════════ */
-.gallery-wrap { max-width: 1200px; margin: 0 auto; }
-.gallery-intro { text-align: center; margin-bottom: 60px; }
-.gallery-intro p { max-width: 500px; margin: 16px auto 0; font-size: 0.9rem; color: #7a6858; line-height: 1.9; }
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+══════════════════════════════════════ */
+.g-intro { text-align: center; margin-bottom: 56px; }
+.g-intro p { max-width: 480px; margin: 14px auto 0; font-size: 0.88rem; color: rgba(42,31,46,0.5); line-height: 1.9; }
+.g-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+.g-item {
+  position: relative; overflow: hidden; border-radius: 22px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.7);
+  box-shadow: 0 4px 24px rgba(180,150,220,0.12), inset 0 1px 0 rgba(255,255,255,0.8);
 }
-.grid-item {
-  position: relative; overflow: hidden;
-  border-radius: 20px;
-  cursor: pointer;
-  border: 1px solid rgba(255,255,255,0.6);
-  box-shadow: 0 4px 24px rgba(160,130,200,0.1);
+.g-item::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(135deg,
+    rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 50%,
+    rgba(200,180,255,0.1) 100%);
+  pointer-events: none;
 }
-.grid-item img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  transition: transform 0.7s ease;
-}
-.grid-item:hover img { transform: scale(1.06); }
-.grid-item.tall { grid-row: span 2; }
-
-.grid-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(0deg, rgba(20,12,8,0.45) 0%, transparent 55%);
+.g-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.7s ease; }
+.g-item:hover img { transform: scale(1.06); }
+.g-item.tall { grid-row: span 2; }
+.g-hover {
+  position: absolute; inset: 0; z-index: 2;
+  background: linear-gradient(0deg, rgba(140,100,200,0.45) 0%, transparent 55%);
   opacity: 0; transition: opacity 0.4s;
-  display: flex; align-items: flex-end; padding: 22px;
+  display: flex; align-items: flex-end; padding: 20px;
 }
-.grid-item:hover .grid-overlay { opacity: 1; }
-.grid-overlay span {
-  font-family: 'Cormorant Garamond', serif;
-  color: white; font-style: italic; font-size: 1rem;
-}
+.g-item:hover .g-hover { opacity: 1; }
+.g-hover span { font-family: 'Cormorant Garamond', serif; color: white; font-style: italic; font-size: 1rem; }
 
-/* ═══════════════════════════════
+/* ══════════════════════════════════════
    VIDEO
-═══════════════════════════════ */
-.video-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 12px; max-width: 1200px; margin: 0 auto;
-}
-.video-item {
-  border-radius: 20px; overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.6);
-  box-shadow: 0 4px 24px rgba(160,130,200,0.1);
-}
-.video-item video { width: 100%; display: block; aspect-ratio: 9/16; object-fit: cover; }
+══════════════════════════════════════ */
+.v-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+.v-item { border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,0.7); box-shadow: 0 4px 24px rgba(180,150,220,0.12); }
+.v-item video { width: 100%; display: block; aspect-ratio: 9/16; object-fit: cover; }
 
-/* ═══════════════════════════════
+/* ══════════════════════════════════════
    MEANING
-═══════════════════════════════ */
-.meaning-wrap {
-  max-width: 640px; margin: 0 auto; text-align: center;
-  padding: 64px 56px; border-radius: 32px;
-}
-.meaning-quote {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1.4rem, 3vw, 2.4rem); font-weight: 300;
-  font-style: italic; line-height: 1.65; margin: 32px 0 24px;
-  color: #2a2018;
-}
-.meaning-text { font-size: 0.92rem; color: #7a6858; line-height: 2; }
-.meaning-text p + p { margin-top: 12px; }
+══════════════════════════════════════ */
+.m-wrap { max-width: 620px; margin: 0 auto; text-align: center; padding: 64px 56px; border-radius: 36px; }
+.m-quote { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.4rem, 3vw, 2.3rem); font-weight: 300; font-style: italic; line-height: 1.65; margin: 30px 0 22px; color: #2a1f2e; }
+.m-text { font-size: 0.92rem; color: rgba(42,31,46,0.55); line-height: 2; }
+.m-text p + p { margin-top: 10px; }
 
-/* ═══════════════════════════════
-   CTA
-═══════════════════════════════ */
-.cta-wrap { text-align: center; max-width: 580px; margin: 0 auto; }
-.cta-wrap p { font-size: 0.92rem; color: #7a6858; line-height: 2; margin: 20px 0 40px; }
+/* ══════════════════════════════════════
+   CTA / INSTA
+══════════════════════════════════════ */
+.cta-wrap { text-align: center; max-width: 560px; margin: 0 auto; }
+.cta-wrap p { font-size: 0.9rem; color: rgba(42,31,46,0.55); line-height: 2; margin: 18px 0 38px; }
+.insta-link { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; font-style: italic; text-decoration: none; display: inline-block; margin-top: 14px; }
 
-/* ═══════════════════════════════
-   INSTAGRAM
-═══════════════════════════════ */
-.insta-link {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 2.2rem; font-style: italic;
-  text-decoration: none; display: inline-block; margin-top: 16px;
-}
-
-/* ═══════════════════════════════
+/* ══════════════════════════════════════
    FOOTER
-═══════════════════════════════ */
+══════════════════════════════════════ */
 footer {
-  padding: 40px 60px; z-index: 1; position: relative;
+  padding: 36px 60px; position: relative; z-index: 1;
   display: flex; justify-content: space-between; align-items: center;
-  background: rgba(255,255,255,0.25);
-  backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255,255,255,0.5);
-}
-.footer-brand {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.1rem; letter-spacing: 6px; text-transform: uppercase;
-  color: #2a2018; opacity: 0.6;
-}
-.footer-copy { font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: #9a8878; }
-
-/* ═══════════════════════════════
-   LIGHTBOX
-═══════════════════════════════ */
-.lightbox {
-  display: none; position: fixed; inset: 0; z-index: 999;
-  align-items: center; justify-content: center;
-}
-.lightbox.open { display: flex; }
-.lb-bg {
-  position: absolute; inset: 0;
-  background: rgba(10,6,4,0.88);
+  background: rgba(255,255,255,0.28);
   backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(255,255,255,0.55);
 }
-.lb-img {
-  position: relative; z-index: 2;
-  max-width: 90vw; max-height: 88vh; object-fit: contain;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.2);
-  box-shadow: 0 32px 80px rgba(0,0,0,0.5);
-  animation: lb-pop 0.3s ease both;
-}
-@keyframes lb-pop { from { opacity:0; transform:scale(0.94); } to { opacity:1; transform:scale(1); } }
-.lb-close {
-  position: absolute; top: 24px; right: 28px; z-index: 3;
-  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
-  color: rgba(255,255,255,0.7); font-size: 1.4rem;
-  width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.25s; backdrop-filter: blur(8px);
-}
-.lb-close:hover { background: rgba(255,255,255,0.25); color: white; }
-.lb-btn {
-  position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
-  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
-  color: rgba(255,255,255,0.7); font-size: 1.4rem;
-  width: 52px; height: 52px; border-radius: 50%; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.25s; backdrop-filter: blur(8px);
-}
-.lb-btn:hover { background: rgba(255,255,255,0.25); color: white; }
-.lb-prev { left: 24px; }
-.lb-next { right: 24px; }
-.lb-count {
-  position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 3;
-  font-size: 0.6rem; letter-spacing: 3px; color: rgba(255,255,255,0.35); text-transform: uppercase;
-}
+.f-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; letter-spacing: 6px; text-transform: uppercase; color: rgba(42,31,46,0.5); }
+.f-copy { font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(42,31,46,0.35); }
 
-/* ═══════════════════════════════
+/* ══════════════════════════════════════
+   LIGHTBOX
+══════════════════════════════════════ */
+.lb { display: none; position: fixed; inset: 0; z-index: 999; align-items: center; justify-content: center; }
+.lb.open { display: flex; }
+.lb-bg { position: absolute; inset: 0; background: rgba(40,20,60,0.82); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); }
+.lb-img { position: relative; z-index: 2; max-width: 90vw; max-height: 88vh; object-fit: contain; border-radius: 18px; border: 1px solid rgba(255,255,255,0.25); box-shadow: 0 32px 80px rgba(0,0,0,0.4); animation: lb-in 0.28s ease both; }
+@keyframes lb-in { from { opacity:0; transform:scale(0.94); } to { opacity:1; transform:scale(1); } }
+.lb-x { position: absolute; top: 22px; right: 24px; z-index: 3; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); color: rgba(255,255,255,0.75); font-size: 1.3rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .25s; }
+.lb-x:hover { background: rgba(255,255,255,0.25); color: white; }
+.lb-nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 3; width: 52px; height: 52px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); color: rgba(255,255,255,0.75); font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .25s; }
+.lb-nav:hover { background: rgba(255,255,255,0.25); color: white; }
+.lb-p { left: 22px; } .lb-n { right: 22px; }
+.lb-c { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 3; font-size: 0.58rem; letter-spacing: 3px; color: rgba(255,255,255,0.3); text-transform: uppercase; }
+
+/* ══════════════════════════════════════
    REVEAL
-═══════════════════════════════ */
-.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s ease, transform 0.9s ease; }
-.reveal.visible { opacity: 1; transform: none; }
+══════════════════════════════════════ */
+.r { opacity: 0; transform: translateY(26px); transition: opacity 0.9s ease, transform 0.9s ease; }
+.r.on { opacity: 1; transform: none; }
 
-/* ═══════════════════════════════
+/* ══════════════════════════════════════
    RESPONSIVE
-═══════════════════════════════ */
+══════════════════════════════════════ */
 @media (max-width: 900px) {
   nav { padding: 16px 20px; } .nav-links { display: none; }
-  .section { padding: 70px 20px; }
-  .hero-card { margin: 0 20px 40px; padding: 32px 28px; }
-  .grid { grid-template-columns: 1fr 1fr; }
-  .grid-item.tall { grid-row: span 1; }
-  .video-grid { grid-template-columns: 1fr; }
-  .about-wrap, .meaning-wrap { padding: 40px 28px; }
-  footer { flex-direction: column; gap: 14px; text-align: center; }
+  section { padding: 70px 20px; }
+  .hero-content { margin: 0 16px 36px; padding: 32px 26px; }
+  .g-grid { grid-template-columns: 1fr 1fr; }
+  .g-item.tall { grid-row: span 1; }
+  .v-grid { grid-template-columns: 1fr; }
+  .about-wrap, .m-wrap { padding: 40px 24px; }
+  footer { flex-direction: column; gap: 12px; text-align: center; }
 }
-@media (max-width: 560px) {
-  .grid { grid-template-columns: 1fr; }
-}
+@media (max-width: 560px) { .g-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 
-<!-- Holographic canvas background -->
-<canvas id="holo-bg"></canvas>
+<!-- Floating blob layer -->
+<div class="blob-layer">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="drop drop-1"></div>
+  <div class="drop drop-2"></div>
+  <div class="drop drop-3"></div>
+  <div class="drop drop-4"></div>
+  <div class="drop drop-5"></div>
+  <div class="drop drop-6"></div>
+</div>
 
 <!-- NAV -->
 <nav>
-  <a href="#"><img src="img/logo.png" alt="LUMI" style="height:40px;"></a>
+  <a href="#"><img src="img/logo.png" alt="LUMI"></a>
   <div class="nav-links">
     <a href="#about">О нас</a>
     <a href="#gallery">Украшения</a>
     <a href="#meaning">Смысл</a>
   </div>
-  <a href="https://instagram.com/lumi_jewerly" class="nav-insta" target="_blank">@lumi_jewerly</a>
+  <a href="https://instagram.com/lumi_jewerly" class="nav-insta holo" target="_blank">@lumi_jewerly</a>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
+<div class="hero">
   <div class="hero-photo"></div>
   <div class="hero-tint"></div>
-  <div class="hero-card glass-dark">
+  <div class="hero-content glass-hero">
     <div class="hero-eyebrow">LUMI Jewelry</div>
-    <h1>Times like this<br>need your <span class="holo-text">magic</span></h1>
+    <h1>Times like this<br>need your <span class="holo">magic</span></h1>
     <p class="hero-sub">Украшения, в которых живёт свет. Созданы, чтобы напоминать о твоём внутреннем сиянии.</p>
-    <a href="#gallery" class="btn-glass">Смотреть украшения</a>
+    <a href="#gallery" class="btn-pearl">Смотреть украшения</a>
   </div>
-</section>
+</div>
 
 <!-- ABOUT -->
-<section class="section" id="about">
-  <div class="about-wrap glass reveal">
-    <span class="eyebrow holo-text">О бренде</span>
+<section id="about">
+  <div class="about-wrap glass r">
+    <span class="eyebrow holo">О бренде</span>
     <h2 class="serif">LUMI Jewelry</h2>
-    <div class="thin-line center"></div>
+    <div class="rule c"></div>
     <div class="about-text">
       <p>Украшения, созданные вручную из прозрачной смолы, в которую добавлено сияние света. Каждое изделие уникально — его невозможно повторить в точности.</p>
       <p>В каждом — своё свечение, своё ощущение, своё состояние.</p>
-      <p>Это не просто украшения.<br>Это способ сохранить и почувствовать свет внутри.</p>
+      <p>Это не просто украшения. Это способ сохранить и почувствовать свет внутри.</p>
     </div>
   </div>
 </section>
 
 <!-- GALLERY -->
-<section class="section" id="gallery" style="padding-top:0;">
-  <div class="gallery-wrap">
-    <div class="gallery-intro reveal">
-      <span class="eyebrow holo-text">Украшения</span>
-      <h2 class="serif">Каждое — как <em class="holo-text">капля света</em></h2>
-      <p>Лёгкое, прозрачное, живое. Создано, чтобы стать твоим личным символом.</p>
-    </div>
-    <div class="grid">
-      <div class="grid-item tall reveal">
-        <img src="img/p12.jpg" alt="">
-        <div class="grid-overlay"><span>Капли света</span></div>
-      </div>
-      <div class="grid-item reveal" style="transition-delay:.08s">
-        <img src="img/p9.jpg" alt="" style="object-position:center top">
-        <div class="grid-overlay"><span>Ожерелье</span></div>
-      </div>
-      <div class="grid-item reveal" style="transition-delay:.14s">
-        <img src="img/p7.jpg" alt="" style="object-position:center top">
-        <div class="grid-overlay"><span>Лёгкость</span></div>
-      </div>
-      <div class="grid-item reveal" style="transition-delay:.06s">
-        <img src="img/p5.jpg" alt="" style="object-position:center 30%">
-        <div class="grid-overlay"><span>Сердечко</span></div>
-      </div>
-      <div class="grid-item reveal" style="transition-delay:.12s">
-        <img src="img/p6.jpg" alt="" style="object-position:center 30%">
-        <div class="grid-overlay"><span>Чокер</span></div>
-      </div>
-      <div class="grid-item tall reveal" style="transition-delay:.08s">
-        <img src="img/p10.jpg" alt="">
-        <div class="grid-overlay"><span>Браслет</span></div>
-      </div>
-      <div class="grid-item reveal" style="transition-delay:.1s">
-        <img src="img/p8.jpg" alt="" style="object-position:center 30%">
-        <div class="grid-overlay"><span>Свет на коже</span></div>
-      </div>
-      <div class="grid-item reveal" style="transition-delay:.16s">
-        <img src="img/p11.jpg" alt="" style="object-position:center top">
-        <div class="grid-overlay"><span>Кулон</span></div>
-      </div>
-      <div class="grid-item reveal" style="transition-delay:.2s">
-        <img src="img/p1.jpg" alt="">
-        <div class="grid-overlay"><span>LUMI</span></div>
-      </div>
-    </div>
+<section id="gallery" style="padding-top:0">
+  <div class="g-intro r">
+    <span class="eyebrow holo">Украшения</span>
+    <h2 class="serif">Каждое — как <em class="holo">капля света</em></h2>
+    <p>Лёгкое, прозрачное, живое. Создано, чтобы стать твоим личным символом.</p>
+  </div>
+  <div class="g-grid">
+    <div class="g-item tall r"><img src="img/p12.jpg" alt=""><div class="g-hover"><span>Капли света</span></div></div>
+    <div class="g-item r" style="transition-delay:.07s"><img src="img/p9.jpg" alt="" style="object-position:center top"><div class="g-hover"><span>Ожерелье</span></div></div>
+    <div class="g-item r" style="transition-delay:.13s"><img src="img/p7.jpg" alt="" style="object-position:center top"><div class="g-hover"><span>Лёгкость</span></div></div>
+    <div class="g-item r" style="transition-delay:.05s"><img src="img/p5.jpg" alt="" style="object-position:center 30%"><div class="g-hover"><span>Сердечко</span></div></div>
+    <div class="g-item r" style="transition-delay:.11s"><img src="img/p6.jpg" alt="" style="object-position:center 30%"><div class="g-hover"><span>Чокер</span></div></div>
+    <div class="g-item tall r" style="transition-delay:.07s"><img src="img/p10.jpg" alt=""><div class="g-hover"><span>Браслет</span></div></div>
+    <div class="g-item r" style="transition-delay:.09s"><img src="img/p8.jpg" alt="" style="object-position:center 30%"><div class="g-hover"><span>Свет</span></div></div>
+    <div class="g-item r" style="transition-delay:.15s"><img src="img/p11.jpg" alt="" style="object-position:center top"><div class="g-hover"><span>Кулон</span></div></div>
+    <div class="g-item r" style="transition-delay:.19s"><img src="img/p1.jpg" alt=""><div class="g-hover"><span>LUMI</span></div></div>
   </div>
 </section>
 
 <!-- VIDEO -->
-<section class="section">
-  <div class="gallery-wrap">
-    <div class="gallery-intro reveal">
-      <span class="eyebrow holo-text">В движении</span>
-      <h2 class="serif">Свет, который <em class="holo-text">живёт</em></h2>
-    </div>
-    <div class="video-grid">
-      <div class="video-item reveal"><video src="img/v1.mp4" autoplay muted loop playsinline></video></div>
-      <div class="video-item reveal" style="transition-delay:.1s"><video src="img/v2.mp4" autoplay muted loop playsinline></video></div>
-      <div class="video-item reveal" style="transition-delay:.2s"><video src="img/v3.mp4" autoplay muted loop playsinline></video></div>
-    </div>
+<section>
+  <div class="g-intro r">
+    <span class="eyebrow holo">В движении</span>
+    <h2 class="serif">Свет, который <em class="holo">живёт</em></h2>
+  </div>
+  <div class="v-grid">
+    <div class="v-item r"><video src="img/v1.mp4" autoplay muted loop playsinline></video></div>
+    <div class="v-item r" style="transition-delay:.1s"><video src="img/v2.mp4" autoplay muted loop playsinline></video></div>
+    <div class="v-item r" style="transition-delay:.2s"><video src="img/v3.mp4" autoplay muted loop playsinline></video></div>
   </div>
 </section>
 
 <!-- MEANING -->
-<section class="section" id="meaning">
-  <div class="meaning-wrap glass reveal">
-    <span class="eyebrow holo-text">Смысл</span>
-    <p class="meaning-quote">«Иногда всё, что нам нужно —<br>это напоминание»</p>
-    <div class="meaning-text">
+<section id="meaning">
+  <div class="m-wrap glass r">
+    <span class="eyebrow holo">Смысл</span>
+    <p class="m-quote">«Иногда всё, что нам нужно —<br>это напоминание»</p>
+    <div class="m-text">
       <p>О том, что внутри уже есть свет.</p>
       <p>О том, что магия — не где-то, а в нас.</p>
     </div>
@@ -512,140 +465,72 @@ footer {
 </section>
 
 <!-- CTA -->
-<section class="section" id="contact">
-  <div class="cta-wrap reveal">
-    <span class="eyebrow holo-text">Найди своё</span>
-    <h2 class="serif">Почувствуй, как оно<br><em class="holo-text">откликается</em></h2>
+<section>
+  <div class="cta-wrap r">
+    <span class="eyebrow holo">Найди своё</span>
+    <h2 class="serif">Почувствуй, как оно<br><em class="holo">откликается</em></h2>
     <p>Найди своё украшение и ощути, как оно резонирует с твоим внутренним светом.</p>
-    <a href="https://instagram.com/lumi_jewerly" class="btn-glass-holo" target="_blank">Написать нам</a>
+    <a href="https://instagram.com/lumi_jewerly" class="btn-holo" target="_blank">Написать нам</a>
   </div>
 </section>
 
 <!-- INSTAGRAM -->
-<section class="section" style="padding:60px;text-align:center;">
-  <div class="reveal">
-    <span class="eyebrow holo-text">Мы в Instagram</span>
-    <br>
-    <a href="https://instagram.com/lumi_jewerly" class="insta-link holo-text" target="_blank">@lumi_jewerly</a>
+<section style="padding:60px;text-align:center;">
+  <div class="r">
+    <span class="eyebrow holo">Мы в Instagram</span><br>
+    <a href="https://instagram.com/lumi_jewerly" class="insta-link holo" target="_blank">@lumi_jewerly</a>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-brand">Lumi</div>
-  <div class="footer-copy">© 2026 LUMI Jewelry · Украшения из света</div>
+  <div class="f-brand">Lumi</div>
+  <div class="f-copy">© 2026 LUMI Jewelry · Украшения из света</div>
 </footer>
 
 <!-- LIGHTBOX -->
-<div class="lightbox" id="lb">
+<div class="lb" id="lb">
   <div class="lb-bg" id="lb-bg"></div>
-  <button class="lb-close" id="lb-close">×</button>
-  <button class="lb-btn lb-prev" id="lb-prev">‹</button>
+  <button class="lb-x" id="lb-x">×</button>
+  <button class="lb-nav lb-p" id="lb-p">‹</button>
   <img class="lb-img" id="lb-img" src="" alt="">
-  <button class="lb-btn lb-next" id="lb-next">›</button>
-  <div class="lb-count" id="lb-count"></div>
+  <button class="lb-nav lb-n" id="lb-n">›</button>
+  <div class="lb-c" id="lb-c"></div>
 </div>
 
 <script>
-// ── HOLOGRAPHIC CANVAS ──────────────────────────────────
-(function() {
-  const cv = document.getElementById('holo-bg');
-  const cx = cv.getContext('2d');
-  let W, H, frame = 0;
-
-  function resize() {
-    W = cv.width = window.innerWidth;
-    H = cv.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  // Pastel holographic blobs for light theme
-  const blobs = [
-    { px: 0.18, py: 0.22, vx: 0.12, vy: 0.08, r: 0.52, c0: 'rgba(230,180,255,0.45)', c1: 'rgba(230,180,255,0)' },
-    { px: 0.78, py: 0.18, vx:-0.09, vy: 0.11, r: 0.48, c0: 'rgba(170,210,255,0.4)',  c1: 'rgba(170,210,255,0)' },
-    { px: 0.50, py: 0.72, vx: 0.08, vy:-0.13, r: 0.55, c0: 'rgba(200,230,255,0.38)', c1: 'rgba(200,230,255,0)' },
-    { px: 0.08, py: 0.78, vx: 0.14, vy:-0.07, r: 0.40, c0: 'rgba(255,200,230,0.38)', c1: 'rgba(255,200,230,0)' },
-    { px: 0.90, py: 0.68, vx:-0.11, vy:-0.10, r: 0.44, c0: 'rgba(210,240,255,0.42)', c1: 'rgba(210,240,255,0)' },
-    { px: 0.45, py: 0.05, vx: 0.07, vy: 0.14, r: 0.38, c0: 'rgba(255,220,200,0.35)', c1: 'rgba(255,220,200,0)' },
-  ];
-
-  function draw() {
-    cx.clearRect(0, 0, W, H);
-    // Cream base
-    cx.fillStyle = '#f5f2ee';
-    cx.fillRect(0, 0, W, H);
-
-    blobs.forEach(b => {
-      b.px += b.vx * 0.001;
-      b.py += b.vy * 0.001;
-      if (b.px < 0 || b.px > 1) b.vx *= -1;
-      if (b.py < 0 || b.py > 1) b.vy *= -1;
-
-      const x = b.px * W, y = b.py * H;
-      const r = b.r * Math.max(W, H) * (1 + 0.04 * Math.sin(frame * 0.008 + b.px * 5));
-
-      const g = cx.createRadialGradient(x - r*0.15, y - r*0.15, 0, x, y, r);
-      g.addColorStop(0, b.c0);
-      g.addColorStop(1, b.c1);
-
-      cx.save();
-      cx.globalCompositeOperation = 'multiply';
-      cx.fillStyle = g;
-      cx.beginPath(); cx.arc(x, y, r, 0, Math.PI*2); cx.fill();
-      cx.restore();
-    });
-
-    // Subtle shimmer
-    const shimmer = cx.createLinearGradient(
-      W * (0.3 + 0.1 * Math.sin(frame * 0.005)), 0,
-      W * (0.7 + 0.1 * Math.cos(frame * 0.004)), H
-    );
-    shimmer.addColorStop(0, 'rgba(255,255,255,0)');
-    shimmer.addColorStop(0.5, 'rgba(255,255,255,0.12)');
-    shimmer.addColorStop(1, 'rgba(255,255,255,0)');
-    cx.fillStyle = shimmer;
-    cx.fillRect(0, 0, W, H);
-
-    frame++;
-    requestAnimationFrame(draw);
-  }
-  draw();
-})();
-
-// ── LIGHTBOX ──────────────────────────────────────────
-const imgs = [...document.querySelectorAll('.grid-item img')];
+// Lightbox
+const imgs = [...document.querySelectorAll('.g-item img')];
 const lb = document.getElementById('lb');
 const lbImg = document.getElementById('lb-img');
-const lbCount = document.getElementById('lb-count');
+const lbC = document.getElementById('lb-c');
 let cur = 0;
 
 function show(i) {
   cur = (i + imgs.length) % imgs.length;
   lbImg.src = imgs[cur].src;
-  lbCount.textContent = (cur + 1) + ' / ' + imgs.length;
+  lbC.textContent = (cur + 1) + ' / ' + imgs.length;
   lb.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 function close() { lb.classList.remove('open'); document.body.style.overflow = ''; }
-
 imgs.forEach((img, i) => img.parentElement.addEventListener('click', () => show(i)));
-document.getElementById('lb-close').addEventListener('click', close);
+document.getElementById('lb-x').addEventListener('click', close);
 document.getElementById('lb-bg').addEventListener('click', close);
-document.getElementById('lb-prev').addEventListener('click', () => show(cur - 1));
-document.getElementById('lb-next').addEventListener('click', () => show(cur + 1));
+document.getElementById('lb-p').addEventListener('click', () => show(cur - 1));
+document.getElementById('lb-n').addEventListener('click', () => show(cur + 1));
 document.addEventListener('keydown', e => {
   if (!lb.classList.contains('open')) return;
   if (e.key === 'ArrowRight') show(cur + 1);
-  if (e.key === 'ArrowLeft')  show(cur - 1);
-  if (e.key === 'Escape')     close();
+  if (e.key === 'ArrowLeft') show(cur - 1);
+  if (e.key === 'Escape') close();
 });
 
-// ── REVEAL ────────────────────────────────────────────
+// Reveal
 const io = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
 }, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+document.querySelectorAll('.r').forEach(el => io.observe(el));
 </script>
 </body>
 </html>
